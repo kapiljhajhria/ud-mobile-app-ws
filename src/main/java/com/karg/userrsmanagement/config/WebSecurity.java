@@ -1,6 +1,7 @@
 package com.karg.userrsmanagement.config;
 
 import com.karg.userrsmanagement.filter.AuthenticationFilter;
+import com.karg.userrsmanagement.filter.AuthorizationFilter;
 import com.karg.userrsmanagement.service.UserService;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,7 +27,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll();
 
-        http.authorizeRequests().anyRequest().authenticated().and().addFilter(getAuthenticationFilter());
+        http.authorizeRequests().anyRequest().authenticated().and()
+                .addFilter(getAuthenticationFilter())
+                .addFilter(new AuthorizationFilter(authenticationManager()));
     }
 
     @Override
