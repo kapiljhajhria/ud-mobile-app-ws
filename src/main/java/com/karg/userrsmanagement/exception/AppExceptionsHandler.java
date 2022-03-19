@@ -19,5 +19,13 @@ public class AppExceptionsHandler {
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    // you can use below code to handle multiple exceptions using one method. TO handle
+//    multiple exception you will have to change the function param to Exception.class , a more generic type
+//    @ExceptionHandler(value = {UserServiceException.class, NullPointerException.class})
+//    public ResponseEntity<Object> handleUserServiceException(Exception ex, WebRequest request) {
+//
+//        ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage());
+//        return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
 }
