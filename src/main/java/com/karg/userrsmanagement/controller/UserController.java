@@ -1,6 +1,8 @@
 package com.karg.userrsmanagement.controller;
 
 
+import com.karg.userrsmanagement.exception.ErrorMessages;
+import com.karg.userrsmanagement.exception.UserServiceException;
 import com.karg.userrsmanagement.service.UserService;
 import com.karg.userrsmanagement.shared.dto.UserDto;
 import com.karg.userrsmanagement.ui.model.request.UserDetailsRequestModel;
@@ -33,6 +35,10 @@ public class UserController {
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserRest> createUser(@RequestBody UserDetailsRequestModel userDetails) {
         UserRest returnValue = new UserRest();
+
+        if (userDetails.getFirstName().isEmpty()) {
+            throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+        }
 
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);
