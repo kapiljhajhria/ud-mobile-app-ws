@@ -7,6 +7,7 @@ import com.karg.userrsmanagement.ui.model.request.UserDetailsRequestModel;
 import com.karg.userrsmanagement.ui.model.response.UserRest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping(path = "/{userId}")
+    @GetMapping(path = "/{userId}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
         UserRest returnValue = new UserRest();
 
