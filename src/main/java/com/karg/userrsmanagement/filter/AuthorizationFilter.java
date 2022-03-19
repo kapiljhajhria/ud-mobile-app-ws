@@ -42,7 +42,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
         if (token != null) {
             token = token.replace(SecurityConstants.TOKEN_PREFIX, "");
 
-            Algorithm algorithm = Algorithm.HMAC512(SecurityConstants.TOKEN_SECRET);
+            Algorithm algorithm = Algorithm.HMAC512(SecurityConstants.getTokenSecret());
             JWTVerifier verifier = JWT.require(algorithm)
                     .build();
             DecodedJWT jwt = verifier.verify(token);

@@ -1,5 +1,6 @@
 package com.karg.userrsmanagement;
 
+import com.karg.userrsmanagement.config.AppProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,11 @@ public class UserrsManagementApplication {
 	@Bean
 	public SpringApplicationContext springApplicationContext() {
 		return new SpringApplicationContext();
+	}
+
+	@Bean
+	public AppProperties appProperties() {
+		return new AppProperties();
 	}
 
 }
