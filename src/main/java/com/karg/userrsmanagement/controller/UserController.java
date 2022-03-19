@@ -18,7 +18,8 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping(path = "/{userId}", produces = MediaType.APPLICATION_XML_VALUE)
+    @GetMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    // first media type will be default
     public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
         UserRest returnValue = new UserRest();
 
@@ -29,7 +30,7 @@ public class UserController {
         return ResponseEntity.ok().body(returnValue);
     }
 
-    @PostMapping
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserRest> createUser(@RequestBody UserDetailsRequestModel userDetails) {
         UserRest returnValue = new UserRest();
 
@@ -43,12 +44,12 @@ public class UserController {
         return ResponseEntity.created(null).body(returnValue);
     }
 
-    @PutMapping
+    @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public String updateUser() {
         return "update user was called";
     }
 
-    @DeleteMapping
+    @DeleteMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public String deleteUser() {
         return "delete user was called";
     }
