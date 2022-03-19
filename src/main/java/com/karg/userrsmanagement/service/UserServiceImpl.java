@@ -2,6 +2,7 @@ package com.karg.userrsmanagement.service;
 
 import com.karg.userrsmanagement.entity.UserEntity;
 import com.karg.userrsmanagement.repository.UserRepository;
+import com.karg.userrsmanagement.shared.Utils;
 import com.karg.userrsmanagement.shared.dto.UserDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    Utils utils;
 
     @Override
     public UserDto createUser(UserDto user) {
@@ -25,8 +29,9 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(user, userEntity);
 
+        String publicUserId = utils.generateUserId(30);
+        userEntity.setUserId(publicUserId);
         userEntity.setEncryptedPassword("encryptedPassword");
-        userEntity.setUserId("testUserId");
 
 
         storedUserDetails = userRepository.save(userEntity);
