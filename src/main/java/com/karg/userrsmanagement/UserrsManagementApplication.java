@@ -23,7 +23,7 @@ public class UserrsManagementApplication {
 		return new SpringApplicationContext();
 	}
 
-	@Bean
+	@Bean(name = "AppProperties")
 	public AppProperties appProperties() {
 		return new AppProperties();
 	}

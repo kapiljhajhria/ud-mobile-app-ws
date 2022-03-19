@@ -13,7 +13,7 @@ public class SecurityConstants {
     public static final String LOGIN_URL = "/api/v1/login";
 
     public static String getTokenSecret() {
-        AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("appProperties");
+        AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("AppProperties");
         log.info("is Token secret null:- " + (appProperties.getTokenSecret() == null));
         return appProperties.getTokenSecret();
     }
