@@ -3,7 +3,10 @@ package com.karg.userrsmanagement.filter;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.karg.userrsmanagement.SpringApplicationContext;
 import com.karg.userrsmanagement.config.SecurityConstants;
+import com.karg.userrsmanagement.service.UserService;
+import com.karg.userrsmanagement.shared.dto.UserDto;
 import com.karg.userrsmanagement.ui.model.request.UserLoginRequestModel;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -56,6 +59,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .sign(algorithm);
+
+        UserService userService = (UserService) SpringApplicationContext.getBean("userServiceImpl");
+
+        // get user from UserServiceImpl
+        UserDto userDto = userService.getUser(username);//username is email in this case
+
+        //set user id as response header
+
+        response.addHeader("UserID", userDto.getUserId().toString());//userId is public id and id is private db generated id (from entity)
 
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
 
