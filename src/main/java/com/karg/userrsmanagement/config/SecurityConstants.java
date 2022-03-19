@@ -1,6 +1,6 @@
 package com.karg.userrsmanagement.config;
 
-public class SecurityConstant {
+public class SecurityConstants {
 
     public static final long EXPIRATION_TIME = 864000000;
     public static final String TOKEN_PREFIX = "BEARER ";
