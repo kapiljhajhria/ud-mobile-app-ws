@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -50,9 +52,12 @@ public class UserController {
         return ResponseEntity.created(null).body(returnValue);
     }
 
-    @PutMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+    @PutMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public String updateUser() {
+    public String updateUser(@PathVariable String userId, @Valid @RequestBody UserDetailsRequestModel userDetails) {
+        UserRest returnValue = new UserRest();
+
+
         return "update user was called";
     }
 
