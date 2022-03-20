@@ -1,5 +1,6 @@
 package com.karg.userrsmanagement.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @ControllerAdvice
 public class AppExceptionsHandler {
 
@@ -41,14 +43,20 @@ public class AppExceptionsHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(
+    public ResponseEntity<Object> handleValidationExceptions(
             MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
+            System.out.println(fieldName + " " + errorMessage);
+
+//            if(fieldName.equals("defaultMessage") || fieldName.equals("field")){
+//                errors.put(fieldName, errorMessage);
+//            }
+            log.info("fieldName : " + fieldName + " errorMessage : " + errorMessage);
             errors.put(fieldName, errorMessage);
         });
-        return errors;
+        return new ResponseEntity<>(new ErrorMessage(new Date(), errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }
