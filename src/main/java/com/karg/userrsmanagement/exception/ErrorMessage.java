@@ -13,5 +13,5 @@ import java.util.Date;
 @AllArgsConstructor
 public class ErrorMessage {
     private Date timestamp;
-    private String message;
+    private Object message;
 }
