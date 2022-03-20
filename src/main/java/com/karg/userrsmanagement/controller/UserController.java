@@ -7,6 +7,7 @@ import com.karg.userrsmanagement.service.UserService;
 import com.karg.userrsmanagement.shared.dto.UserDto;
 import com.karg.userrsmanagement.ui.model.request.UserDetailsRequestModel;
 import com.karg.userrsmanagement.ui.model.response.UserRest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -54,11 +56,16 @@ public class UserController {
 
     @PutMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public String updateUser(@PathVariable String userId, @Valid @RequestBody UserDetailsRequestModel userDetails) {
+    public ResponseEntity<UserRest> updateUser(@PathVariable String userId, @Valid @RequestBody UserDetailsRequestModel userDetails) {
         UserRest returnValue = new UserRest();
 
-
-        return "update user was called";
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails, userDto);
+        log.info("UserDto: " + userDto);
+        UserDto updatedUser = userService.updateUser(userId, userDto);
+        log.info("User updated successfully ,{}", updatedUser);
+        BeanUtils.copyProperties(updatedUser, returnValue);
+        return ResponseEntity.ok(returnValue);
     }
 
     @DeleteMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

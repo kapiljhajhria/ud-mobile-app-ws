@@ -1,6 +1,8 @@
 package com.karg.userrsmanagement.service;
 
 import com.karg.userrsmanagement.entity.UserEntity;
+import com.karg.userrsmanagement.exception.ErrorMessages;
+import com.karg.userrsmanagement.exception.UserIdNotFoundException;
 import com.karg.userrsmanagement.repository.UserRepository;
 import com.karg.userrsmanagement.shared.Utils;
 import com.karg.userrsmanagement.shared.dto.UserDto;
@@ -77,6 +79,30 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userEntity, returnValue);
 
         return returnValue;
+    }
+
+    @Override
+    public UserDto updateUser(String userId, UserDto userDto) {
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        if (userEntity == null) {
+            throw new UserIdNotFoundException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+        }
+
+        if (userDto.getFirstName() != null || !userDto.getFirstName().isEmpty()) {
+            userEntity.setFirstName(userDto.getFirstName());
+        }
+        if (userDto.getLastName() != null || !userDto.getLastName().isEmpty()) {
+            userEntity.setLastName(userDto.getLastName());
+        }
+
+        UserEntity updatedUserEntity = userRepository.save(userEntity);
+
+        UserDto returnValue = new UserDto();
+        BeanUtils.copyProperties(updatedUserEntity, returnValue);
+
+        return returnValue;
+
     }
 
     @Override
