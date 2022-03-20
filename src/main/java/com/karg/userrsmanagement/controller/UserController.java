@@ -5,7 +5,10 @@ import com.karg.userrsmanagement.exception.ErrorMessages;
 import com.karg.userrsmanagement.exception.UserServiceException;
 import com.karg.userrsmanagement.service.UserService;
 import com.karg.userrsmanagement.shared.dto.UserDto;
+import com.karg.userrsmanagement.ui.model.request.RequestOperationName;
 import com.karg.userrsmanagement.ui.model.request.UserDetailsRequestModel;
+import com.karg.userrsmanagement.ui.model.response.OperationStatusModel;
+import com.karg.userrsmanagement.ui.model.response.RequestOperationStatus;
 import com.karg.userrsmanagement.ui.model.response.UserRest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -68,8 +71,12 @@ public class UserController {
         return ResponseEntity.ok(returnValue);
     }
 
-    @DeleteMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public String deleteUser() {
-        return "delete user was called";
+    @DeleteMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<OperationStatusModel> deleteUser(@PathVariable String userId) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+        userService.deleteUser(userId);
+        returnValue.setOperationName(RequestOperationName.DELETE.name());
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        return ResponseEntity.ok().body(returnValue);
     }
 }
