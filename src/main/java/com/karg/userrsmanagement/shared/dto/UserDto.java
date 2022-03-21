@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serial;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +21,5 @@ public class UserDto implements java.io.Serializable {
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus = false;
+    private List<AddressDto> addresses;
 }
