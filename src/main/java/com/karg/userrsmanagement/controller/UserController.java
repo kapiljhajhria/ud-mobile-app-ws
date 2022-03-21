@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserRest>> getAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
+    public ResponseEntity<List<UserRest>> getAllUsers(@RequestParam(value = "page", defaultValue = "0") int page,
                                                       @RequestParam(value = "limit", defaultValue = "25") int limit) {
         List<UserDto> users = userService.getUsers(page, limit);
 
@@ -50,6 +50,7 @@ public class UserController {
 
         for (UserDto userDto : users) {
             log.info("User details: {}", userDto);
+            UserRest userModel = new UserRest();
             BeanUtils.copyProperties(userDto, userModel);
             returnValue.add(userModel);
         }
