@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -35,6 +37,22 @@ public class UserController {
         UserDto userDto = userService.getUserByUserId(userId);
 
         BeanUtils.copyProperties(userDto, returnValue);
+
+        return ResponseEntity.ok().body(returnValue);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<UserRest>> getAllUsers(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                      @RequestParam(value = "limit", defaultValue = "25") int limit) {
+        List<UserDto> users = userService.getUsers(page, limit);
+
+        List<UserRest> returnValue = new ArrayList<>();
+
+        for (UserDto userDto : users) {
+            log.info("User details: {}", userDto);
+            BeanUtils.copyProperties(userDto, userModel);
+            returnValue.add(userModel);
+        }
 
         return ResponseEntity.ok().body(returnValue);
     }
