@@ -3,9 +3,12 @@ package com.karg.userrsmanagement.service;
 import com.karg.userrsmanagement.entity.UserEntity;
 import com.karg.userrsmanagement.exception.ErrorMessages;
 import com.karg.userrsmanagement.exception.UserIdNotFoundException;
+import com.karg.userrsmanagement.exception.UserServiceException;
 import com.karg.userrsmanagement.repository.UserRepository;
 import com.karg.userrsmanagement.shared.Utils;
+import com.karg.userrsmanagement.shared.dto.AddressDto;
 import com.karg.userrsmanagement.shared.dto.UserDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,25 +37,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto user) {
+        if (userRepository.findByEmail(user.getEmail()) != null)
+            throw new UserServiceException("Record already exists");
 
-        UserEntity storedUserDetails = userRepository.findByEmail(user.getEmail());
-
-        if (storedUserDetails != null) {
-            throw new RuntimeException("User already exists");
+        for (int i = 0; i < user.getAddresses().size(); i++) {
+            AddressDto address = user.getAddresses().get(i);
+            address.setUserDetails(user);
+            address.setAddressId(utils.generateAddressId(30));
+            user.getAddresses().set(i, address);
         }
 
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(user, userEntity);
+        //BeanUtils.copyProperties(user, userEntity);
+        ModelMapper modelMapper = new ModelMapper();
+        UserEntity userEntity = modelMapper.map(user, UserEntity.class);
 
         String publicUserId = utils.generateUserId(30);
         userEntity.setUserId(publicUserId);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
+        UserEntity storedUserDetails = userRepository.save(userEntity);
 
-        storedUserDetails = userRepository.save(userEntity);
+        //BeanUtils.copyProperties(storedUserDetails, returnValue);
+        UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
 
-        UserDto returnValue = new UserDto();
-        BeanUtils.copyProperties(storedUserDetails, returnValue);
+        // Send an email message to user to verify their email address
 
         return returnValue;
     }
