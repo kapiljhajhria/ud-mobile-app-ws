@@ -55,6 +55,10 @@ public class UserServiceImpl implements UserService {
         userEntity.setUserId(publicUserId);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
+        //generate token for email verification
+        userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
+        userEntity.setEmailVerificationStatus(false);
+
         UserEntity storedUserDetails = userRepository.save(userEntity);
 
         //BeanUtils.copyProperties(storedUserDetails, returnValue);
@@ -146,6 +150,22 @@ public class UserServiceImpl implements UserService {
             returnValue.add(userDto);
         }
 
+        return returnValue;
+    }
+
+    @Override
+    public boolean verifyEmailToken(String token) {
+        UserEntity userEntity = userRepository.findUserByEmailVerificationToken(token);
+        boolean returnValue = false;
+        if (userEntity != null) {
+            boolean hasTokenExpired = Utils.hasTokenExpired(token);
+            if (!hasTokenExpired) {
+                userEntity.setEmailVerificationToken(null);
+                userEntity.setEmailVerificationStatus(Boolean.TRUE);
+                userRepository.save(userEntity);
+                returnValue = true;
+            }
+        }
         return returnValue;
     }
 
