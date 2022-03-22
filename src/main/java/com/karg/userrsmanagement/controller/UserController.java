@@ -18,6 +18,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -130,6 +132,24 @@ public class UserController {
         AddressDto addressDTOs = addressesService.getUserAddress(addressId);
 
         AddressesRest returnValue = new ModelMapper().map(addressDTOs, AddressesRest.class);
+
+        //http://localhost:8080/users/{userId}
+        Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).withRel("user");
+        //http://localhost:8080/users/{userId}/addresses
+        Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class)
+                .slash(userId)
+                .slash("addresses")
+                .withRel("addresses");
+        //http://localhost:8080/users/{userId}/addresses/{addressId
+        Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class)
+                .slash(userId)
+                .slash("addresses")
+                .slash(addressId)
+                .withRel("self");
+
+        returnValue.add(userLink);
+        returnValue.add(userAddressesLink);
+        returnValue.add(selfLink);
 
         return ResponseEntity.ok().body(returnValue);
     }
