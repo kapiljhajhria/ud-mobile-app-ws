@@ -68,7 +68,6 @@ public class UserController {
 
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserRest> createUser(@RequestBody UserDetailsRequestModel userDetails) {
-        UserRest returnValue = new UserRest();
 
         if (userDetails.getFirstName().isEmpty()) {
             throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
@@ -120,6 +119,17 @@ public class UserController {
             }.getType();
             returnValue = new ModelMapper().map(addressDTOs, listType);
         }
+
+        return ResponseEntity.ok().body(returnValue);
+    }
+
+    @GetMapping(path = "/{userId}/addresses/{addressId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<AddressesRest> getUserAddresses(@PathVariable String userId, @PathVariable String addressId) {
+
+
+        AddressDto addressDTOs = addressesService.getUserAddress(addressId);
+
+        AddressesRest returnValue = new ModelMapper().map(addressDTOs, AddressesRest.class);
 
         return ResponseEntity.ok().body(returnValue);
     }
