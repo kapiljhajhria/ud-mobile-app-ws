@@ -90,6 +90,7 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-ses</artifactId>
+			<version>1.12.181</version>
 		</dependency>
 
 	</dependencies>
