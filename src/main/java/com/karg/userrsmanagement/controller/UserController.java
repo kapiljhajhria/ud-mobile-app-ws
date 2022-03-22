@@ -138,15 +138,15 @@ public class UserController {
         //http://localhost:8080/users/{userId}
         Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).withRel("user");
         //http://localhost:8080/users/{userId}/addresses
-        Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class)
-                .slash(userId)
-                .slash("addresses")
+        Link userAddressesLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddresses(userId))
+//                .slash(userId)
+//                .slash("addresses")
                 .withRel("addresses");
         //http://localhost:8080/users/{userId}/addresses/{addressId
-        Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class)
-                .slash(userId)
-                .slash("addresses")
-                .slash(addressId)
+        Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddresses(userId, addressId))
+//                .slash(userId)
+//                .slash("addresses")
+//                .slash(addressId)
                 .withRel("self");
 
 //        returnValue.add(userLink);
