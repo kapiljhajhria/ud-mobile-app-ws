@@ -3,15 +3,19 @@ package com.karg.userrsmanagement.controller;
 
 import com.karg.userrsmanagement.exception.ErrorMessages;
 import com.karg.userrsmanagement.exception.UserServiceException;
+import com.karg.userrsmanagement.service.AddressesService;
 import com.karg.userrsmanagement.service.UserService;
+import com.karg.userrsmanagement.shared.dto.AddressDto;
 import com.karg.userrsmanagement.shared.dto.UserDto;
 import com.karg.userrsmanagement.ui.model.request.RequestOperationName;
 import com.karg.userrsmanagement.ui.model.request.UserDetailsRequestModel;
+import com.karg.userrsmanagement.ui.model.response.AddressesRest;
 import com.karg.userrsmanagement.ui.model.response.OperationStatusModel;
 import com.karg.userrsmanagement.ui.model.response.RequestOperationStatus;
 import com.karg.userrsmanagement.ui.model.response.UserRest;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,6 +33,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    AddressesService addressesService;
 
     @GetMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     // first media type will be default
@@ -99,6 +106,21 @@ public class UserController {
         userService.deleteUser(userId);
         returnValue.setOperationName(RequestOperationName.DELETE.name());
         returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        return ResponseEntity.ok().body(returnValue);
+    }
+
+    @GetMapping(path = "/{userId}/addresses", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<List<AddressesRest>> getUserAddresses(@PathVariable String userId) {
+        List<AddressesRest> returnValue = new ArrayList<>();
+
+        List<AddressDto> addressDTOs = addressesService.getUserAddresses(userId);
+
+        if (addressDTOs != null && !addressDTOs.isEmpty()) {
+            java.lang.reflect.Type listType = new TypeToken<List<AddressesRest>>() {
+            }.getType();
+            returnValue = new ModelMapper().map(addressDTOs, listType);
+        }
+
         return ResponseEntity.ok().body(returnValue);
     }
 }
