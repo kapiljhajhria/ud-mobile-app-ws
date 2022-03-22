@@ -115,6 +115,7 @@ public class UserController {
 
     @GetMapping(path = "/{userId}/addresses", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<CollectionModel<AddressesRest>> getUserAddresses(@PathVariable String userId) {
+        log.info("Getting user addresses for user id: {}", userId);
         List<AddressesRest> returnValue = new ArrayList<>();
 
         List<AddressDto> addressDTOs = addressesService.getUserAddresses(userId);
@@ -123,6 +124,11 @@ public class UserController {
             java.lang.reflect.Type listType = new TypeToken<List<AddressesRest>>() {
             }.getType();
             returnValue = new ModelMapper().map(addressDTOs, listType);
+        }
+
+        for (AddressesRest addressesRest : returnValue) {
+            Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class).getUserAddresses(userId, addressesRest.getAddressId())).withSelfRel();
+            addressesRest.add(selfLink);
         }
 
         Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userId).withRel("user");
