@@ -178,6 +178,13 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+//        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+
+//        return new User(String username, String password, boolean enabled, boolean accountNonExpired,
+//        boolean credentialsNonExpired, boolean accountNonLocked,
+//        Collection<? extends GrantedAuthority> authorities)
+
+        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), userEntity.getEmailVerificationStatus(), true,
+                true, true, new ArrayList<>());
     }
 }
