@@ -68,15 +68,19 @@ public class AmazonSES {
         String htmlBodyWithTokensAndFirstName = htmlBodyWithTokens.replace("$firstName", firstName);
         String textBodyWithTokens = PASSWORD_RESET_TEXT_BODY.replace("$token", token);
         String textBodyWithTokensAndFirstName = textBodyWithTokens.replace("$firstName", firstName);
-
+        SendEmailResult result;
         try {
             SendEmailRequest request = new SendEmailRequest()
                     .withDestination(new Destination().withToAddresses(email))
                     .withMessage(new Message().withBody(new Body().withHtml(new Content().withCharset("UTF-8").withData(htmlBodyWithTokensAndFirstName)).withText(
                             new Content().withCharset("UTF-8").withData(textBodyWithTokensAndFirstName))).withSubject(new Content().withCharset("UTF-8").withData(PASSWORD_RESET_SUBJECT))).withSource(FROM);
 
-            client.sendEmail(request);
-            returnValue = true;
+            result = client.sendEmail(request);
+
+            if (result != null && result.getMessageId() != null && !result.getMessageId().isEmpty()) {
+                returnValue = true;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
