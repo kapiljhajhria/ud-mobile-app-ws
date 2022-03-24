@@ -6,6 +6,7 @@ import com.example.photoapp.service.AddressesService;
 import com.example.photoapp.service.UserService;
 import com.example.photoapp.shared.dto.AddressDto;
 import com.example.photoapp.shared.dto.UserDto;
+import com.example.photoapp.ui.model.request.PasswordResetModel;
 import com.example.photoapp.ui.model.request.PasswordResetRequestModel;
 import com.example.photoapp.ui.model.request.RequestOperationName;
 import com.example.photoapp.ui.model.request.UserDetailsRequestModel;
@@ -211,5 +212,23 @@ public class UserController {
             returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
         }
         return ResponseEntity.ok().body(returnValue);
+    }
+
+    @PostMapping(path = "/password-reset", produces = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<OperationStatusModel> resetPassword(@RequestBody PasswordResetModel passwordResetModel) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+
+        boolean operationResult = userService.resetPassword(passwordResetModel.getToken(), passwordResetModel.getPassword());
+
+        returnValue.setOperationName(RequestOperationName.PASSWORD_RESET.name());
+        returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+
+        if (operationResult) {
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        }
+        return ResponseEntity.ok().body(returnValue);
+
     }
 }
