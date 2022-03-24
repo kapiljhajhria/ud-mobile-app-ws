@@ -1,7 +1,9 @@
 server:
-  port: 8081
+  port: 8080
   error:
     include-stacktrace: never
+  servlet:
+    context-path: /photo-app
 
 
 spring:
