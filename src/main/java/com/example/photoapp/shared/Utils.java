@@ -16,6 +16,15 @@ public class Utils {
 
     private final Random RANDOM = new SecureRandom();
     private final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+    public String generatePasswordResetToken(String userId) {
+
+        return JWT.create()
+                .withSubject(userId)
+                .withExpiresAt(
+                        new Date(System.currentTimeMillis() + SecurityConstants.PASSWORD_RESET_EXPIRATION_TIME))
+                .sign(Algorithm.HMAC512(SecurityConstants.getTokenSecret()));
+    }
     // private final int ITERATIONS = 10000;
     // private final int KEY_LENGTH = 256;
 
