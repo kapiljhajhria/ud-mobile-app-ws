@@ -1,7 +1,8 @@
 server:
-  port: 8080
+  port: 8081
   error:
     include-stacktrace: never
+
 
 spring:
   datasource:
@@ -17,4 +18,7 @@ spring:
       ddl-auto: 'create-drop'
     show-sql: true
 
+
 tokenSecret: karg-secret
+
+ses: validatedemail@gmail.com

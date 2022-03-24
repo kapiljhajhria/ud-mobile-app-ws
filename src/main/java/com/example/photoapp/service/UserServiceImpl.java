@@ -5,6 +5,7 @@ import com.example.photoapp.exception.ErrorMessages;
 import com.example.photoapp.exception.UserIdNotFoundException;
 import com.example.photoapp.exception.UserServiceException;
 import com.example.photoapp.repository.UserRepository;
+import com.example.photoapp.shared.AmazonSES;
 import com.example.photoapp.shared.Utils;
 import com.example.photoapp.shared.dto.AddressDto;
 import com.example.photoapp.shared.dto.UserDto;
@@ -65,6 +66,7 @@ public class UserServiceImpl implements UserService {
         UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
 
         // Send an email message to user to verify their email address
+        new AmazonSES().verifyEmail(returnValue);
 
         return returnValue;
     }
