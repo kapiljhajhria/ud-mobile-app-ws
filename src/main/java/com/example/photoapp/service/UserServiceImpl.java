@@ -1,9 +1,11 @@
 package com.example.photoapp.service;
 
+import com.example.photoapp.entity.PasswordResetTokenEntity;
 import com.example.photoapp.entity.UserEntity;
 import com.example.photoapp.exception.ErrorMessages;
 import com.example.photoapp.exception.UserIdNotFoundException;
 import com.example.photoapp.exception.UserServiceException;
+import com.example.photoapp.repository.PasswordResetTokenRepository;
 import com.example.photoapp.repository.UserRepository;
 import com.example.photoapp.shared.AmazonSES;
 import com.example.photoapp.shared.Utils;
@@ -35,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Override
     public UserDto createUser(UserDto user) {
@@ -169,6 +174,32 @@ public class UserServiceImpl implements UserService {
                 returnValue = true;
             }
         }
+        return returnValue;
+    }
+
+    @Override
+    public boolean requestPasswordReset(String email) {
+
+        boolean returnValue = false;
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null) {
+            return false;
+        }
+
+        //generate jjwt token
+        String token = new Utils().generatePasswordResetToken(userEntity.getUserId());
+
+        // store token in db and associate it with user
+
+        PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+        passwordResetTokenEntity.setUser(userEntity);
+        passwordResetTokenEntity.setToken(token);
+
+        passwordResetTokenRepository.save(passwordResetTokenEntity);
+
+        returnValue = new AmazonSES().sendPasswordResetRequest(userEntity.getFirstName(), userEntity.getEmail(), token);
+
         return returnValue;
     }
 

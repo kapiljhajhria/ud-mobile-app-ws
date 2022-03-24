@@ -6,6 +6,7 @@ import com.example.photoapp.service.AddressesService;
 import com.example.photoapp.service.UserService;
 import com.example.photoapp.shared.dto.AddressDto;
 import com.example.photoapp.shared.dto.UserDto;
+import com.example.photoapp.ui.model.request.PasswordResetRequestModel;
 import com.example.photoapp.ui.model.request.RequestOperationName;
 import com.example.photoapp.ui.model.request.UserDetailsRequestModel;
 import com.example.photoapp.ui.model.response.AddressesRest;
@@ -187,6 +188,24 @@ public class UserController {
         boolean isVerified = userService.verifyEmailToken(token);
 
         if (isVerified) {
+            returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        } else {
+            returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+        }
+        return ResponseEntity.ok().body(returnValue);
+    }
+
+    @PostMapping(path = "/password-reset-request", produces = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE,
+            MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<OperationStatusModel> requestPasswordReset(@RequestBody PasswordResetRequestModel passwordResetRequestModel) {
+        OperationStatusModel returnValue = new OperationStatusModel();
+
+        returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+
+        boolean operationResult = userService.requestPasswordReset(passwordResetRequestModel.getEmail());
+
+        if (operationResult) {
             returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
         } else {
             returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
