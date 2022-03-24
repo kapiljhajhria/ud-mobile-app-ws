@@ -15,6 +15,7 @@ public class SecurityConstants {
     public static final String LOGIN_URL = "/api/v1/login";
     public static final String EMAIL_VERIFICATION_URL = "/api/v1/users/email-verification";
     public static final String PASSWORD_RESET_REQUEST_URL = "/api/v1/users/password-reset-request";
+    public static final String PASSWORD_RESET_URL = "/api/v1/users/password-reset";
 
     public static String getTokenSecret() {
         AppProperties appProperties = (AppProperties) SpringApplicationContext.getBean("AppProperties");
