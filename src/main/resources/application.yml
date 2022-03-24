@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/photo_app
-    username: kp
+    username: postgres
     password: postgres
     platform: postgres
     driverClassName: org.postgresql.Driver
@@ -14,7 +14,7 @@ spring:
     database: postgresql
 
     hibernate:
-      ddl-auto: 'update'
+      ddl-auto: 'create-drop'
     show-sql: true
 
 tokenSecret: karg-secret
