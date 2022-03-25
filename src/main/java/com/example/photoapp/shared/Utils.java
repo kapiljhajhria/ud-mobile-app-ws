@@ -44,7 +44,7 @@ public class Utils {
         return generateRandomString(i);
     }
 
-    public static Boolean hasTokenExpired(String token) {
+    public Boolean hasTokenExpired(String token) {
 
         // jjwt decode jwt and check if token is expired
         Algorithm algorithm = Algorithm.HMAC512(SecurityConstants.getTokenSecret());
