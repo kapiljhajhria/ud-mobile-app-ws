@@ -8,13 +8,13 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/photo_app
-    username: postgres
-    password: postgres
-    platform: postgres
-    driverClassName: org.h2.Driver
-  jpa:
-    database: postgresql
+#    url: jdbc:postgresql://localhost:5432/photo_app
+    #    username: postgres
+    #    password: postgres
+    #    platform: postgres
+    #    driverClassName: org.h2.Driver
+    #  jpa:
+    #    database: postgresql
 
     hibernate:
       ddl-auto: 'create-drop'

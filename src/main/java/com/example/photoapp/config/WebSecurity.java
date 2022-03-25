@@ -30,11 +30,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.GET, SecurityConstants.EMAIL_VERIFICATION_URL).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_REQUEST_URL).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL).permitAll();
+        http.authorizeRequests().antMatchers(SecurityConstants.H2_CONSOLE).permitAll();
         http.authorizeRequests().anyRequest().authenticated().and()
                 .addFilter(getAuthenticationFilter())
                 .addFilter(new AuthorizationFilter(authenticationManager()));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);// to prevent caching of headers
         // or http session by client
+        http.headers().frameOptions().disable(); //for h2-console, to allow h2-console to work
     }
 
     @Override
