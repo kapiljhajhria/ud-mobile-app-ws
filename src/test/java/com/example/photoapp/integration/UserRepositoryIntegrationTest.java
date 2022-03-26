@@ -102,6 +102,16 @@ class UserRepositoryIntegrationTest {
         assertTrue(userFirstName.contains(keyword));
     }
 
+    @Test
+    final void updateUserEmailVerificationStatus() {
+        boolean isEmailVerified = Boolean.TRUE;
+        userRepository.updateUserEmailVerificationStatus(isEmailVerified, userEntity01.getUserId());
+
+        UserEntity user = userRepository.findByUserId(userEntity01.getUserId());
+
+        assertEquals((boolean) user.getEmailVerificationStatus(), isEmailVerified);
+    }
+
     private void createRecords() {
         //setup userEntity
 

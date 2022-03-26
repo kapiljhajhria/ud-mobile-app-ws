@@ -3,10 +3,12 @@ package com.example.photoapp.repository;
 import com.example.photoapp.entity.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -37,4 +39,9 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 
     @Query(value = "select u.first_name, u.last_name from users u where first_name like %:keyword% or last_name LIKE %:keyword%", nativeQuery = true)
     List<Object[]> findAllUserFirstNameAndLastNamesByKeyword(@Param("keyword") String keyword);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update users u set u.email_verification_status =:emailVerificationStatus where u.user_id=:userId", nativeQuery = true)
+    void updateUserEmailVerificationStatus(@Param("emailVerificationStatus") boolean emailVerificationStatus, @Param("userId") String userId);
 }
