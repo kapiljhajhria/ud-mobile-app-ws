@@ -29,6 +29,10 @@ spring:
     console:
       path: /h2-console
 
+logging:
+  level:
+    sql: DEBUG
+
 
 
 tokenSecret: karg-secret
