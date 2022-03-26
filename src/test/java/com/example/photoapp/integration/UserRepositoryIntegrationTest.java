@@ -87,6 +87,21 @@ class UserRepositoryIntegrationTest {
         assertTrue(user.getFirstName().contains(keyword));
     }
 
+    @Test
+    public void testFindUserByKeywordAndGetObjects() {
+        String keyword = "oh";
+
+        List<Object[]> users = userRepository.findAllUserFirstNameAndLastNamesByKeyword(keyword);
+
+        assertNotNull(users);
+        assertEquals(2, users.size());
+
+        Object[] user = users.get(0);
+        String userFirstName = (String) user[0];
+        String userLastName = (String) user[1];
+        assertTrue(userFirstName.contains(keyword));
+    }
+
     private void createRecords() {
         //setup userEntity
 
