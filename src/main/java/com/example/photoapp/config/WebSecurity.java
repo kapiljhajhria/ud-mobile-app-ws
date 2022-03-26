@@ -38,6 +38,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.GET, SecurityConstants.EMAIL_VERIFICATION_URL).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_REQUEST_URL).permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL).permitAll();
+        http.authorizeRequests().antMatchers("/v3/api-docs", "/configuration/**", "/swagger/**", "/webjars/**").permitAll();
         http.authorizeRequests().antMatchers(SecurityConstants.H2_CONSOLE).permitAll();
         http.authorizeRequests().anyRequest().authenticated().and()
                 .addFilter(getAuthenticationFilter())
