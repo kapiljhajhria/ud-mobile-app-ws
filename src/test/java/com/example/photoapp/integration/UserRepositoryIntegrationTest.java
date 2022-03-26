@@ -16,8 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -73,6 +72,19 @@ class UserRepositoryIntegrationTest {
 
         assertNotNull(userEntities);
         assertEquals(2, userEntities.size());
+    }
+
+    @Test
+    public void testFindUserByKeyword() {
+        String keyword = "oh";
+
+        List<UserEntity> users = userRepository.findAllUsersByKeyword(keyword);
+
+        assertNotNull(users);
+        assertEquals(2, users.size());
+
+        UserEntity user = users.get(0);
+        assertTrue(user.getFirstName().contains(keyword));
     }
 
     private void createRecords() {
