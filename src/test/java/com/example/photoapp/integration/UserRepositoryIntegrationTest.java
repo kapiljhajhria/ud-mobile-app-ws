@@ -111,7 +111,22 @@ class UserRepositoryIntegrationTest {
 
         UserEntity user = userRepository.findByUserId(userEntity01.getUserId());
 
-        assertEquals((boolean) user.getEmailVerificationStatus(), isEmailVerified);
+        assertEquals(user.getEmailVerificationStatus(), isEmailVerified);
+    }
+
+    @Test
+    void getUserEntityFullNameByIdTest() {
+
+        List<Object[]> users = userRepository.getUserEntityFullNameById(userId01);
+
+        assertNotNull(users);
+
+        Object[] user = users.get(0);
+        String userFirstName = (String) user[0];
+        String userLastName = (String) user[1];
+
+        assertEquals("John", userFirstName);
+        assertEquals("Doe", userLastName);
     }
 
 //    @Test
