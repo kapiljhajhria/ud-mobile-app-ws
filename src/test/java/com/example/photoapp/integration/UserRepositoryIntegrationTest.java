@@ -129,6 +129,16 @@ class UserRepositoryIntegrationTest {
         assertEquals("Doe", userLastName);
     }
 
+    @Test
+    void updateUserEntityEmailVerificationStatusTest() {
+        boolean isEmailVerified = Boolean.FALSE;
+        userRepository.updateUserEntityEmailVerificationStatus(userId01, isEmailVerified);
+
+        UserEntity storedUser = userRepository.findByUserId(userId01);
+
+        assertEquals(storedUser.getEmailVerificationStatus(), isEmailVerified);
+    }
+
 //    @Test
 //    @Disabled
 //    final void findUserEntityByUserIdTest(){
