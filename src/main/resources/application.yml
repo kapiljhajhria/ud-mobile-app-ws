@@ -32,7 +32,13 @@ spring:
 logging:
   level:
     sql: DEBUG
-
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
 
 
 tokenSecret: karg-secret
