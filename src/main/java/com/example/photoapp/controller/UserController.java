@@ -179,7 +179,7 @@ public class UserController {
                 .body(EntityModel.of(returnValue, Arrays.asList(userLink, userAddressesLink, selfLink)));
     }
 
-    @CrossOrigin(origins = "*")
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping(path = "/email-verification", produces = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<OperationStatusModel> verifyEmailToken(@RequestParam(name = "token") String token) {
