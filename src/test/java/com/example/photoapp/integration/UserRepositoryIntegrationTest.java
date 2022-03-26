@@ -27,6 +27,8 @@ class UserRepositoryIntegrationTest {
 
     UserEntity userEntity01 = new UserEntity();
     UserEntity userEntity02 = new UserEntity();
+    final String userId01 = "1a2b3c4d5e6f7g8h9i0j";
+    final String userId02 = "1a2b3c4d5e6f7g8h9i0jsda";
 
     static boolean recordsCreated = false;
 
@@ -112,6 +114,16 @@ class UserRepositoryIntegrationTest {
         assertEquals((boolean) user.getEmailVerificationStatus(), isEmailVerified);
     }
 
+//    @Test
+//    @Disabled
+//    final void findUserEntityByUserIdTest(){
+//        UserEntity user = userRepository.findUserEntityByUserId(userId01);
+//
+//        assertNotNull(user);
+//        assertEquals(userId01, user.getUserId());
+//
+//    }
+
     private void createRecords() {
         //setup userEntity
 
@@ -120,7 +132,7 @@ class UserRepositoryIntegrationTest {
         userEntity01.setEmailVerificationStatus(Boolean.TRUE);
         userEntity01.setFirstName("John");
         userEntity01.setLastName("Doe");
-        userEntity01.setUserId("1a2b3c4d5e6f7g8h9i0j");
+        userEntity01.setUserId(userId01);
 
         userEntity02.setEmail("john2@email.com");
         userEntity02.setEncryptedPassword("password");
@@ -133,7 +145,7 @@ class UserRepositoryIntegrationTest {
         AddressEntity addressEntity = new AddressEntity();
         addressEntity.setCity("New York");
         addressEntity.setCountry("USA");
-        addressEntity.setAddressId("1a2b3c4d5e6f7g8h9i0jsda");
+        addressEntity.setAddressId(userId02);
         addressEntity.setUserDetails(userEntity01);
         addressEntity.setType("shipping");
         addressEntity.setStreetName("Wall street");

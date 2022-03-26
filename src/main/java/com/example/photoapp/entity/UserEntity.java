@@ -7,9 +7,10 @@ import javax.persistence.*;
 import java.io.Serial;
 import java.util.List;
 
-@Entity(name = "users")
+@Entity
 @Getter
 @Setter
+@Table(name = "users")
 public class UserEntity implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = 5313493413859894403L;
