@@ -1,8 +1,10 @@
 package com.example.photoapp;
 
 import com.example.photoapp.config.AppProperties;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import org.springframework.boot.SpringApplication;
@@ -25,6 +27,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
                 )
         }
 )
+@OpenAPIDefinition(info = @Info(
+        title = "Title",
+        description = "description",
+        version = "1.0.1"
+
+
+))
 public class PhotoAppApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
