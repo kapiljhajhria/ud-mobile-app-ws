@@ -44,6 +44,8 @@ logging:
             sql:
               BasicBinder: TRACE
 
+springdoc:
+  show-login-endpoint: true
 
 tokenSecret: karg-secret
 
