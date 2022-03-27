@@ -14,6 +14,8 @@ import com.example.photoapp.ui.model.response.AddressesRest;
 import com.example.photoapp.ui.model.response.OperationStatusModel;
 import com.example.photoapp.ui.model.response.RequestOperationStatus;
 import com.example.photoapp.ui.model.response.UserRest;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -55,9 +57,12 @@ public class UserController {
         return ResponseEntity.ok().body(returnValue);
     }
 
-    @GetMapping()
+    @Operation(method = "GET", summary = "Get All Users", description = "Get All Users", tags = {"User"},
+            security = @SecurityRequirement(name = "jwt-auth"))
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<List<UserRest>> getAllUsers(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                      @RequestParam(value = "limit", defaultValue = "25") int limit) {
+                                                      @RequestParam(value = "limit", defaultValue = "25") int limit
+    ) {
         List<UserDto> users = userService.getUsers(page, limit);
 
         List<UserRest> returnValue = new ArrayList<>();
@@ -72,6 +77,8 @@ public class UserController {
         return ResponseEntity.ok().body(returnValue);
     }
 
+    @Operation(method = "POST", summary = "Sign Up", description = "Create a User for sign up and send email for verification", tags = {"User"}
+    )
     @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserRest> createUser(@RequestBody UserDetailsRequestModel userDetails) {
 
@@ -91,6 +98,8 @@ public class UserController {
         return ResponseEntity.created(null).body(returnValue);
     }
 
+    @Operation(method = "PUT", summary = "Modify User", description = "Modify User Details", tags = {"User"},
+            security = @SecurityRequirement(name = "jwt-auth"))
     @PutMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE,
             MediaType.APPLICATION_XML_VALUE})
@@ -107,6 +116,8 @@ public class UserController {
         return ResponseEntity.ok(returnValue);
     }
 
+    @Operation(method = "DELETE", summary = "Delete User", description = "Delete user from db", tags = {"User"},
+            security = @SecurityRequirement(name = "jwt-auth"))
     @DeleteMapping(path = "/{userId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<OperationStatusModel> deleteUser(@PathVariable String userId) {
         OperationStatusModel returnValue = new OperationStatusModel();
